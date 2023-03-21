@@ -1,5 +1,5 @@
 site_name: 模板  # 网站名称
-site_url: https://template.icopy.site/  # 域名
+site_url: https://openai.icopy.site/  # 域名
 theme:
   font: false
   name: material
@@ -17,9 +17,7 @@ extra_javascript:
   - javascripts/extra.js
 
 plugins:
-  - search:
-      prebuild_index: true
-      lang: ja   #不支持中文，凑合用日语规则
+  - mkdocs-jupyter
 markdown_extensions:
   - pymdownx.superfences
   - pymdownx.details
