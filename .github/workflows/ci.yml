@@ -14,6 +14,6 @@ jobs:
           python-version: 3.x
       - run: pip install mkdocs-material mkdocs-jupyter
       - run: cd docs && git clone https://github.com/openai/openai-cookbook.git
-      - run  rm -rf docs/openai-cookbook/.git
-      - run  rm -rf docs/openai-cookbook/examples/vector_databases/pinecone
-      - run: mkdocs gh-deploy --force
+      - run: rm -rf docs/openai-cookbook/.git
+      - run: rm -rf docs/openai-cookbook/examples/vector_databases/pinecone
+      - run: cd .. && mkdocs gh-deploy --force
