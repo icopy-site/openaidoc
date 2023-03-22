@@ -1,15 +1,8 @@
-site_name: 模板  # 网站名称
+site_name: openai-cookbook  # 网站名称
 site_url: https://openai.icopy.site/  # 域名
 theme:
-  font: false
   name: material
-  custom_dir: overrides
-  palette:  # 主题颜色选择
-    primary: black
-    accent: white
-  language: zh  # 语言
-  features:
-    - navigation.top
+  language: en
 
 extra_css:
   - stylesheets/extra.css
@@ -18,6 +11,9 @@ extra_javascript:
 
 plugins:
   - mkdocs-jupyter
+  - search
+
+
 markdown_extensions:
   - pymdownx.superfences
   - pymdownx.details
