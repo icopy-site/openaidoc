@@ -1,0 +1,2647 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://openai.icopy.site/techniques_to_improve_reliability/">
+      
+      
+        <link rel="prev" href="../how_to_work_with_large_language_models/">
+      
+      
+        <link rel="next" href="../text_comparison_examples/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.3">
+    
+    
+      
+        <title>Techniques to improve reliability - openai-cookbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#techniques-to-improve-reliability" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="openai-cookbook" class="md-header__button md-logo" aria-label="openai-cookbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            openai-cookbook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Techniques to improve reliability
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="openai-cookbook" class="md-nav__button md-logo" aria-label="openai-cookbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    openai-cookbook
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        OpenAI Cookbook
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_editing_examples/" class="md-nav__link">
+        Code editing example
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_explanation_examples/" class="md-nav__link">
+        Code explanation examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_writing_examples/" class="md-nav__link">
+        Code writing examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how_to_work_with_large_language_models/" class="md-nav__link">
+        How to work with large language models
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Techniques to improve reliability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Techniques to improve reliability
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-gpt-3-fails-on-complex-tasks" class="md-nav__link">
+    Why GPT-3 fails on complex tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-capabilities-depend-on-context" class="md-nav__link">
+    Model capabilities depend on context
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-improve-reliability-on-complex-tasks" class="md-nav__link">
+    How to improve reliability on complex tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#split-complex-tasks-into-simpler-tasks" class="md-nav__link">
+    Split complex tasks into simpler tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-the-model-to-explain-before-answering" class="md-nav__link">
+    Prompt the model to explain before answering
+  </a>
+  
+    <nav class="md-nav" aria-label="Prompt the model to explain before answering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zero-shot" class="md-nav__link">
+    Zero-shot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#few-shot-examples" class="md-nav__link">
+    Few-shot examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fine-tuned" class="md-nav__link">
+    Fine-tuned
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions-to-chain-of-thought-prompting" class="md-nav__link">
+    Extensions to chain-of-thought prompting
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensions to chain-of-thought prompting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selection-inference-prompting" class="md-nav__link">
+    Selection-inference prompting
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#faithful-reasoning-architecture" class="md-nav__link">
+    Faithful reasoning architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#least-to-most-prompting" class="md-nav__link">
+    Least-to-most prompting
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-ideas" class="md-nav__link">
+    Related ideas
+  </a>
+  
+    <nav class="md-nav" aria-label="Related ideas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#maieutic-prompting" class="md-nav__link">
+    Maieutic prompting
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions" class="md-nav__link">
+    Extensions
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#self-consistency" class="md-nav__link">
+    Self-consistency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifiers" class="md-nav__link">
+    Verifiers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#theories-of-reliability" class="md-nav__link">
+    Theories of reliability
+  </a>
+  
+    <nav class="md-nav" aria-label="Theories of reliability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#probabilistic-graphical-models" class="md-nav__link">
+    Probabilistic graphical models
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closing-thoughts" class="md-nav__link">
+    Closing thoughts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bibliography" class="md-nav__link">
+    Bibliography
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text_comparison_examples/" class="md-nav__link">
+        Text comparison examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text_editing_examples/" class="md-nav__link">
+        Text editing examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text_explanation_examples/" class="md-nav__link">
+        Text explanation examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text_writing_examples/" class="md-nav__link">
+        Text writing examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Apps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Apps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1" id="__nav_11_1_label" tabindex="0">
+          File q and a
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          File q and a
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/" class="md-nav__link">
+        File Q&A
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1_2" id="__nav_11_1_2_label" tabindex="0">
+          Nextjs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_1_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Nextjs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs/" class="md-nav__link">
+        File Q&A
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1_3" id="__nav_11_1_3_label" tabindex="0">
+          Nextjs with flask server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Nextjs with flask server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs-with-flask-server/" class="md-nav__link">
+        File Q&A with Next.js and Flask
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1_3_2" id="__nav_11_1_3_2_label" tabindex="0">
+          Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_1_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_1_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs-with-flask-server/server/answer_question/" class="md-nav__link">
+        Answer question
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs-with-flask-server/server/app/" class="md-nav__link">
+        App
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs-with-flask-server/server/config/" class="md-nav__link">
+        Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs-with-flask-server/server/handle_file/" class="md-nav__link">
+        Handle file
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/file-q-and-a/nextjs-with-flask-server/server/utils/" class="md-nav__link">
+        Utils
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_2" id="__nav_11_2_label" tabindex="0">
+          Web crawl q and a
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_2">
+          <span class="md-nav__icon md-icon"></span>
+          Web crawl q and a
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/web-crawl-q-and-a/web-qa/" class="md-nav__link">
+        Web qa
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/web-crawl-q-and-a/web-qa/" class="md-nav__link">
+        Web qa
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Backtranslation_of_SQL_queries/" class="md-nav__link">
+        Backtranslation of SQL queries
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Classification_using_embeddings/" class="md-nav__link">
+        Classification using embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Clustering/" class="md-nav__link">
+        Clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Clustering_for_transaction_classification/" class="md-nav__link">
+        Clustering for Transaction Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Code_search/" class="md-nav__link">
+        Code search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Customizing_embeddings/" class="md-nav__link">
+        Customizing embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Embedding_long_inputs/" class="md-nav__link">
+        Embedding texts that are longer than the model's maximum context length
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Entity_extraction_for_long_documents/" class="md-nav__link">
+        Long Document Content Extraction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Fine-tuned_classification/" class="md-nav__link">
+        Fine tuning classification example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Get_embeddings/" class="md-nav__link">
+        Get embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/How_to_count_tokens_with_tiktoken/" class="md-nav__link">
+        How to count tokens with tiktoken
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/How_to_format_inputs_to_ChatGPT_models/" class="md-nav__link">
+        How to format inputs to ChatGPT models
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/How_to_handle_rate_limits/" class="md-nav__link">
+        How to handle rate limits
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/How_to_stream_completions/" class="md-nav__link">
+        How to stream completions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Multiclass_classification_for_transactions/" class="md-nav__link">
+        Multiclass Classification for Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Obtain_dataset/" class="md-nav__link">
+        Obtain dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Question_answering_using_embeddings/" class="md-nav__link">
+        Question Answering using Embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Recommendation_using_embeddings/" class="md-nav__link">
+        Recommendation using embeddings and nearest neighbor search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Regression_using_embeddings/" class="md-nav__link">
+        Regression using embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Semantic_text_search_using_embeddings/" class="md-nav__link">
+        Semantic text search using embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Unit_test_writing_using_a_multi-step_prompt/" class="md-nav__link">
+        Unit test writing using a multi-step prompt
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/User_and_product_embeddings/" class="md-nav__link">
+        User and product embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Visualizing_embeddings_in_2D/" class="md-nav__link">
+        Visualizing embeddings in 2D
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Visualizing_embeddings_in_3D/" class="md-nav__link">
+        Visualizing embeddings in 3D
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Visualizing_embeddings_in_W%26B/" class="md-nav__link">
+        Visualizing embeddings in W&B
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/Zero-shot_classification_with_embeddings/" class="md-nav__link">
+        Zero shot classification with embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/api_request_parallel_processor/" class="md-nav__link">
+        Api request parallel processor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_28" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_28" id="__nav_12_28_label" tabindex="0">
+          Azure
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_12_28_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_28">
+          <span class="md-nav__icon md-icon"></span>
+          Azure
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/azure/completions/" class="md-nav__link">
+        Azure completions example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/azure/embeddings/" class="md-nav__link">
+        Azure embeddings example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/azure/finetuning/" class="md-nav__link">
+        Azure Fine tuning example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_29" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_29" id="__nav_12_29_label" tabindex="0">
+          Book translation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_12_29_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_29">
+          <span class="md-nav__icon md-icon"></span>
+          Book translation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/book_translation/translate_latex_book/" class="md-nav__link">
+        Translate a book writen in LaTeX from Slovenian into English
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_30" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_30" id="__nav_12_30_label" tabindex="0">
+          Dalle
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_12_30_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_30">
+          <span class="md-nav__icon md-icon"></span>
+          Dalle
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/dalle/Image_generations_edits_and_variations_with_DALL-E/" class="md-nav__link">
+        DALL-E
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_31" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_31" id="__nav_12_31_label" tabindex="0">
+          Fine tuned qa
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_12_31_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_31">
+          <span class="md-nav__icon md-icon"></span>
+          Fine tuned qa
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/fine-tuned_qa/answers_with_ft/" class="md-nav__link">
+        Answers with ft
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/fine-tuned_qa/olympics-1-collect-data/" class="md-nav__link">
+        1. Collect Wikipedia data about Olympic Games 2020
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/fine-tuned_qa/olympics-2-create-qa/" class="md-nav__link">
+        2. Creating a synthetic Q&amp;A dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/fine-tuned_qa/olympics-3-train-qa/" class="md-nav__link">
+        3. Train a fine-tuning model specialized for Q&amp;A
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_32" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_32" id="__nav_12_32_label" tabindex="0">
+          Vector databases
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_12_32_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_32">
+          <span class="md-nav__icon md-icon"></span>
+          Vector databases
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/Using_vector_databases_for_embeddings_search/" class="md-nav__link">
+        Using Vector Databases for Embeddings Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_32_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_32_2" id="__nav_12_32_2_label" tabindex="0">
+          Qdrant
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_12_32_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_32_2">
+          <span class="md-nav__icon md-icon"></span>
+          Qdrant
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/qdrant/Getting_started_with_Qdrant_and_OpenAI/" class="md-nav__link">
+        Using Qdrant as a vector database for OpenAI embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/qdrant/QA_with_Langchain_Qdrant_and_OpenAI/" class="md-nav__link">
+        Question Answering with Langchain, Qdrant and OpenAI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_32_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_32_3" id="__nav_12_32_3_label" tabindex="0">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_12_32_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_32_3">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/redis/" class="md-nav__link">
+        Redis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/redis/getting-started-with-redis-and-openai/" class="md-nav__link">
+        Using Redis as a Vector Database with OpenAI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/redis/nbutils/" class="md-nav__link">
+        Nbutils
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12_32_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12_32_4" id="__nav_12_32_4_label" tabindex="0">
+          Weaviate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_12_32_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12_32_4">
+          <span class="md-nav__icon md-icon"></span>
+          Weaviate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/weaviate/" class="md-nav__link">
+        Weaviate <> OpenAI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/weaviate/getting-started-with-weaviate-and-openai/" class="md-nav__link">
+        Using Weaviate with OpenAI vectorize module for Embeddings Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/weaviate/hybrid-search-with-weaviate-and-openai/" class="md-nav__link">
+        Using Weaviate with OpenAI vectorize module for Hybrid Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/vector_databases/weaviate/question-answering-with-weaviate-and-openai/" class="md-nav__link">
+        Question Answering in Weaviate with OpenAI Q&amp;A module
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          transition guides for deprecated API endpoints
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          transition guides for deprecated API endpoints
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transition_guides_for_deprecated_API_endpoints/" class="md-nav__link">
+        Deprecation of Answers, Classification, and Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transition_guides_for_deprecated_API_endpoints/answers_functionality_example/" class="md-nav__link">
+        Answers functionality example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transition_guides_for_deprecated_API_endpoints/classification_functionality_example/" class="md-nav__link">
+        Classification functionality example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transition_guides_for_deprecated_API_endpoints/search_functionality_example/" class="md-nav__link">
+        Search functionality example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-gpt-3-fails-on-complex-tasks" class="md-nav__link">
+    Why GPT-3 fails on complex tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-capabilities-depend-on-context" class="md-nav__link">
+    Model capabilities depend on context
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-improve-reliability-on-complex-tasks" class="md-nav__link">
+    How to improve reliability on complex tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#split-complex-tasks-into-simpler-tasks" class="md-nav__link">
+    Split complex tasks into simpler tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-the-model-to-explain-before-answering" class="md-nav__link">
+    Prompt the model to explain before answering
+  </a>
+  
+    <nav class="md-nav" aria-label="Prompt the model to explain before answering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zero-shot" class="md-nav__link">
+    Zero-shot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#few-shot-examples" class="md-nav__link">
+    Few-shot examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fine-tuned" class="md-nav__link">
+    Fine-tuned
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions-to-chain-of-thought-prompting" class="md-nav__link">
+    Extensions to chain-of-thought prompting
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensions to chain-of-thought prompting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selection-inference-prompting" class="md-nav__link">
+    Selection-inference prompting
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#faithful-reasoning-architecture" class="md-nav__link">
+    Faithful reasoning architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#least-to-most-prompting" class="md-nav__link">
+    Least-to-most prompting
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-ideas" class="md-nav__link">
+    Related ideas
+  </a>
+  
+    <nav class="md-nav" aria-label="Related ideas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#maieutic-prompting" class="md-nav__link">
+    Maieutic prompting
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions" class="md-nav__link">
+    Extensions
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#self-consistency" class="md-nav__link">
+    Self-consistency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifiers" class="md-nav__link">
+    Verifiers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#theories-of-reliability" class="md-nav__link">
+    Theories of reliability
+  </a>
+  
+    <nav class="md-nav" aria-label="Theories of reliability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#probabilistic-graphical-models" class="md-nav__link">
+    Probabilistic graphical models
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closing-thoughts" class="md-nav__link">
+    Closing thoughts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bibliography" class="md-nav__link">
+    Bibliography
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="techniques-to-improve-reliability">Techniques to improve reliability<a class="headerlink" href="#techniques-to-improve-reliability" title="Permanent link">&para;</a></h1>
+<p>When GPT-3 fails on a task, what should you do?</p>
+<ul>
+<li>Search for a better prompt that elicits more reliable answers?</li>
+<li>Invest in thousands of examples to fine-tune a custom model?</li>
+<li>Assume the model is incapable of the task, and move on?</li>
+</ul>
+<p>There is no simple answer - it depends. However, if your task involves logical reasoning or complexity, consider trying the techniques in this article to build more reliable, high-performing prompts.</p>
+<h2 id="why-gpt-3-fails-on-complex-tasks">Why GPT-3 fails on complex tasks<a class="headerlink" href="#why-gpt-3-fails-on-complex-tasks" title="Permanent link">&para;</a></h2>
+<p>If you were asked to multiply 13 by 17, would the answer pop immediately into your mind? For most of us, probably not. Yet, that doesn't mean humans are incapable of two-digit multiplication. With a few seconds, and some pen and paper, it's not too taxing to work out that 13 x 17 = 130 + 70 + 21 = 221.</p>
+<p>Similarly, if you give GPT-3 a task that's too complex to do in the time it takes to calculate its next token, it may confabulate an incorrect guess. Yet, akin to humans, that doesn't necessarily mean the model is incapable of the task. With some time and space to reason things out, the model still may be able to answer reliably.</p>
+<p>As an example, if you ask <code>text-davinci-002</code> the following math problem about juggling balls, it answers incorrectly:</p>
+<div class="highlight"><pre><span></span><code>Q: A juggler has 16 balls. Half of the balls are golf balls and half of the golf balls are blue. How many blue golf balls are there?
+A:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>There are 8 blue golf balls.
+</code></pre></div>
+<p>Does this mean that GPT-3 cannot do simple math problems? No; in fact, it turns out that by prompting the model with <code>Let's think step by step</code>, the model solves the problem reliably:</p>
+<div class="highlight"><pre><span></span><code>Q: A juggler has 16 balls. Half of the balls are golf balls and half of the golf balls are blue. How many blue golf balls are there?
+A: Let&#39;s think step by step.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>There are 16 balls in total. 
+Half of the balls are golf balls. 
+That means that there are 8 golf balls. 
+Half of the golf balls are blue. 
+That means that there are 4 blue golf balls.
+</code></pre></div>
+<p>Of course, it's hard to tell from only a single example whether this <code>Let's think step by step</code> trick actually works in general or just got lucky on this particular problem. But it really does work. On a benchmark of word math problems, the <code>Let's think step by step</code> trick raised GPT-3's solve rate massively, from a worthless 18% to a decent 79%!</p>
+<h2 id="model-capabilities-depend-on-context">Model capabilities depend on context<a class="headerlink" href="#model-capabilities-depend-on-context" title="Permanent link">&para;</a></h2>
+<p>When learning to work with GPT-3, one common conceptual mistake is to believe that its capabilities are fixed across all contexts. E.g., if GPT-3 gets a simple logic question wrong, then it must be incapable of simple logic.</p>
+<p>But as the <code>Let's think step by step</code> example illustrates, apparent failures of GPT-3 can sometimes be remedied with a better prompt that helps the model steer itself toward the correct output.</p>
+<h2 id="how-to-improve-reliability-on-complex-tasks">How to improve reliability on complex tasks<a class="headerlink" href="#how-to-improve-reliability-on-complex-tasks" title="Permanent link">&para;</a></h2>
+<p>The rest of this article shares techniques for improving reliability of large language models on complex tasks. Although some of the techniques are specific to certain types of problems, many of them are built upon general principles that can be applied to a wide range of tasks, e.g.:</p>
+<ul>
+<li>Give clearer instructions</li>
+<li>Split complex tasks into simpler subtasks</li>
+<li>Structure the instruction to keep the model on task</li>
+<li>Prompt the model to explain before answering</li>
+<li>Ask for justifications of many possible answers, and then synthesize</li>
+<li>Generate many outputs, and then use the model to pick the best one</li>
+<li>Fine-tune custom models to maximize performance</li>
+</ul>
+<h2 id="split-complex-tasks-into-simpler-tasks">Split complex tasks into simpler tasks<a class="headerlink" href="#split-complex-tasks-into-simpler-tasks" title="Permanent link">&para;</a></h2>
+<p>One way to give a model more time and space to think is to break tasks into simpler pieces.</p>
+<p>As an example, consider a task where we ask the model a multiple-choice question about some text - in this case, a game of Clue. When asked directly, <code>text-davinci-002</code> isn't able to put clues 3 &amp; 5 together, and answers incorrectly:</p>
+<div class="highlight"><pre><span></span><code>Use the following clues to answer the following multiple-choice question.
+
+Clues:
+1. Miss Scarlett was the only person in the lounge.
+2. The person with the pipe was in the kitchen.
+3. Colonel Mustard was the only person in the observatory.
+4. Professor Plum was not in the library nor the billiard room.
+5. The person with the candlestick was in the observatory.
+
+Question: Was Colonel Mustard in the observatory with the candlestick?
+(a) Yes; Colonel Mustard was in the observatory with the candlestick
+(b) No; Colonel Mustard was not in the observatory with the candlestick
+(c) Unknown; there is not enough information to determine whether Colonel Mustard was in the observatory with the candlestick
+
+Solution:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>(c) Unknown; there is not enough information to determine whether Colonel Mustard was in the observatory with the candlestick
+</code></pre></div>
+<p>Although clues 3 and 5 establish that Colonel Mustard was the only person in the observatory and that the person in the observatory had the candlestick, the models fails to combine them into a correct answer of (a) Yes.</p>
+<p>However, instead of asking for the answer directly, we can split the task into three pieces:</p>
+<ul>
+<li>First, go through the clues one by one and consider whether the clue is potentially relevant</li>
+<li>Second, combine the relevant clues to reason out the answer to the question</li>
+<li>Third, write the final answer: either (a), (b), or (c)</li>
+</ul>
+<div class="highlight"><pre><span></span><code>Use the following clues to answer the following multiple-choice question, using the following procedure:
+(1) First, go through the clues one by one and consider whether the clue is potentially relevant
+(2) Second, combine the relevant clues to reason out the answer to the question
+(3) Third, map the answer to one of the multiple choice answers: either (a), (b), or (c)
+
+Clues:
+1. Miss Scarlett was the only person in the lounge.
+2. The person with the pipe was in the kitchen.
+3. Colonel Mustard was the only person in the observatory.
+4. Professor Plum was not in the library nor the billiard room.
+5. The person with the candlestick was in the observatory.
+
+Question: Was Colonel Mustard in the observatory with the candlestick?
+(a) Yes; Colonel Mustard was in the observatory with the candlestick
+(b) No; Colonel Mustard was not in the observatory with the candlestick
+(c) Unknown; there is not enough information to determine whether Colonel Mustard was in the observatory with the candlestick
+
+Solution:
+(1) First, go through the clues one by one and consider whether the clue is potentially relevant:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Clue 1: Miss Scarlett was the only person in the lounge. This clue is not relevant.
+Clue 2: The person with the pipe was in the kitchen. This clue is not relevant.
+Clue 3: Colonel Mustard was the only person in the observatory. This clue is relevant.
+Clue 4: Professor Plum was not in the library nor the billiard room. This clue is not relevant.
+Clue 5: The person with the candlestick was in the observatory. This clue is relevant.
+
+(2) Second, combine the relevant clues to reason out the answer to the question:
+Clue 3 and Clue 5 both say that the person with the candlestick was in the observatory. Colonel Mustard was the only person in the observatory, so Colonel Mustard was the person with the candlestick.
+
+(3) Third, write the final answer:
+(a) Yes; Colonel Mustard was in the observatory with the candlestick
+</code></pre></div>
+<p>By giving the model more time and space to think, and guiding it along a reasoning plan, it's able to figure out the correct answer of (a) Yes.</p>
+<p>Another benefit of splitting complex instructions into smaller subtasks is that it can help keep the model focused on each subtask.</p>
+<p>For example, if we ask <code>text-davinci-002</code> to summarize a text in its original language, the model can lapse back into English:</p>
+<div class="highlight"><pre><span></span><code>Summarize the text using the original language of the text. The summary should be one sentence long.
+
+Text:
+&quot;&quot;&quot;
+La estadística (la forma femenina del término alemán Statistik, derivado a su vez del italiano statista, &quot;hombre de Estado&quot;)​ es una ciencia que estudia la variabilidad, colección, organización, análisis, interpretación, y presentación de los datos, así como el proceso aleatorio que los genera siguiendo las leyes de la probabilidad.​ La estadística es una ciencia formal deductiva, con un conocimiento propio, dinámico y en continuo desarrollo obtenido a través del método científico formal. En ocasiones, las ciencias fácticas necesitan utilizar técnicas estadísticas durante su proceso de investigación factual, con el fin de obtener nuevos conocimientos basados en la experimentación y en la observación. En estos casos, la aplicación de la estadística permite el análisis de datos provenientes de una muestra representativa, que busca explicar las correlaciones y dependencias de un fenómeno físico o natural, de ocurrencia en forma aleatoria o condicional.
+&quot;&quot;&quot;
+
+Summary:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>The text explains that statistics is a science that studies the variability, collection, organization, analysis, interpretation, and presentation of data, as well as the random process that generates them following the laws of probability.
+ ```
+
+ However, if we first ask the model to identify the language of the text, and then summarize the text, it becomes more reliable:
+
+```text-davinci-002
+First, identify the language of the text. Second, summarize the text using the original language of the text. The summary should be one sentence long.
+
+Text:
+&quot;&quot;&quot;
+La estadística (la forma femenina del término alemán Statistik, derivado a su vez del italiano statista, &quot;hombre de Estado&quot;)​ es una ciencia que estudia la variabilidad, colección, organización, análisis, interpretación, y presentación de los datos, así como el proceso aleatorio que los genera siguiendo las leyes de la probabilidad.​ La estadística es una ciencia formal deductiva, con un conocimiento propio, dinámico y en continuo desarrollo obtenido a través del método científico formal. En ocasiones, las ciencias fácticas necesitan utilizar técnicas estadísticas durante su proceso de investigación factual, con el fin de obtener nuevos conocimientos basados en la experimentación y en la observación. En estos casos, la aplicación de la estadística permite el análisis de datos provenientes de una muestra representativa, que busca explicar las correlaciones y dependencias de un fenómeno físico o natural, de ocurrencia en forma aleatoria o condicional.
+&quot;&quot;&quot;
+
+Language:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Spanish
+
+La estadística es una ciencia que estudia la variabilidad, colección, organización, análisis, interpretación, y presentación de los datos, así como el proceso aleatorio que los genera siguiendo las leyes de la probabilidad.
+</code></pre></div>
+<h2 id="prompt-the-model-to-explain-before-answering">Prompt the model to explain before answering<a class="headerlink" href="#prompt-the-model-to-explain-before-answering" title="Permanent link">&para;</a></h2>
+<p>Another powerful technique for improving the reliability of answers is to prompt the model to gradually reason out the answer rather than jumping immediately to the final answer. By 'thinking aloud' the model can be far more likely to arrive at the correct answer.</p>
+<h3 id="zero-shot">Zero-shot<a class="headerlink" href="#zero-shot" title="Permanent link">&para;</a></h3>
+<h4 id="method">Method<a class="headerlink" href="#method" title="Permanent link">&para;</a></h4>
+<p>Published by <a href="https://arxiv.org/abs/2205.11916">Takeshi Kojima et al. in 2022</a>, the easiest way to prompt a model to reason out the answer is to simply prepend answers with <code>Let's think step by step.</code> Figure 2 illustrates an example:</p>
+<p><a href="https://arxiv.org/abs/2205.11916"><img alt="zero-shot reasoning example" src="../images/zero-shot_reasoners_fig2.png" />
+<br>Source: <em>Large Language Models are Zero-Shot Reasoners</em> by Takeshi Kojima et al. (2022).</a></p>
+<h4 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h4>
+<p>Applying this simple trick to the MultiArith math dataset, the authors found <code>Let's think step by step</code> quadrupled the accuracy, from 18% to 79%!</p>
+<p><a href="https://arxiv.org/abs/2205.11916"><img alt="zero-shot reasoning example" src="../images/zero-shot_reasoners_tab5.png" />
+<br>Source: <em>Large Language Models are Zero-Shot Reasoners</em> by Takeshi Kojima et al. (2022).</a></p>
+<h4 id="implications">Implications<a class="headerlink" href="#implications" title="Permanent link">&para;</a></h4>
+<p>Although the <code>Let's think step by step</code> trick works well on math problems, it's not effective on all tasks. The authors found that it was most helpful for multi-step arithmetic problems, symbolic reasoning problems, strategy problems, and other reasoning problems. It didn't help with simple math problems or common sense questions, and presumably wouldn't help with many other non-reasoning tasks either.</p>
+<p><a href="https://arxiv.org/abs/2205.11916"><img alt="zero-shot reasoning example" src="../images/zero-shot_reasoners_tab1.png" />
+<br>Source: <em>Large Language Models are Zero-Shot Reasoners</em> by Takeshi Kojima et al. (2022).</a></p>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2205.11916">full paper</a>.</p>
+<p>If you apply this technique to your own tasks, don't be afraid to experiment with customizing the instruction. <code>Let's think step by step</code> is rather generic, so you may find better performance with instructions that hew to a stricter format customized to your use case. For example, if you were  you can try more structured variants like <code>First, think step by step about why X might be true. Second, think step by step about why Y might be true. Third, think step by step about whether X or Y makes more sense.</code>. And you can even give the model an example format to help keep it on track, e.g.:</p>
+<div class="highlight"><pre><span></span><code>Using the IRS guidance below, answer the following questions using this format:
+(1) For each criterion, determine whether it is met by the vehicle purchase
+- {Criterion} Let&#39;s think step by step. {explanation} {yes or no, or if the question does not apply then N/A}.
+(2) After considering each criterion in turn, phrase the final answer as &quot;Because of {reasons}, the answer is likely {yes or no}.&quot;
+
+IRS guidance:
+&quot;&quot;&quot;
+You may be eligible for a federal tax credit under Section 30D if you purchased a car or truck that meets the following criteria:
+- Does the vehicle have at least four wheels?
+- Does the vehicle weigh less than 14,000 pounds?
+- Does the vehicle draw energy from a battery with at least 4 kilowatt hours that may be recharged from an external source?
+- Was the vehicle purchased in a year before 2022?
+  - If so, has the manufacturer sold less than 200,000 qualifying vehicles? (Tesla and GM have sold more than 200,000 qualifying vehicles.)
+- Was the vehicle purchased in a year after 2022?
+  - If so, is the vehicle present in the following list of North American-assembled vehicles? (The only electric vehicles assembled in North America are the Audi Q5, BMW 330e, BMW X5, Chevrolet Bolt EUV, Chevrolet Bolt EV, Chrysler Pacifica PHEV, Ford Escape PHEV, Ford F Series, Ford Mustang MACH E, Ford Transit Van, GMC Hummer Pickup, GMC Hummer SUV, Jeep Grand Cherokee PHEV, Jeep Wrangler PHEV, Lincoln Aviator PHEV, Lincoln Corsair Plug-in, Lucid Air, Nissan Leaf, Rivian EDV, Rivian R1S, Rivian R1T, Tesla Model 3, Tesla Model S, Tesla Model X, Tesla Model Y, Volvo S60, BMW 330e, Bolt EV, Cadillac Lyriq, Mercedes EQS SUV, and Nissan Leaf.)
+&quot;&quot;&quot;
+
+Question: Can I claim a federal tax credit for my Toyota Prius Prime bought in 2021?
+
+Solution:
+
+(1) For each criterion, determine whether it is met by the vehicle purchase
+- Does the vehicle have at least four wheels? Let&#39;s think step by step.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code> The Toyota Prius Prime has four wheels, so the answer is yes.
+- Does the vehicle weigh less than 14,000 pounds? Let&#39;s think step by step. The Toyota Prius Prime weighs less than 14,000 pounds, so the answer is yes.
+- Does the vehicle draw energy from a battery with at least 4 kilowatt hours that may be recharged from an external source? Let&#39;s think step by step. The Toyota Prius Prime has a battery with at least 4 kilowatt hours that may be recharged from an external source, so the answer is yes.
+- Was the vehicle purchased in a year before 2022? Let&#39;s think step by step. The Toyota Prius Prime was purchased in 2021, which is before 2022, so the answer is yes.
+- Was the vehicle purchased in a year after 2022? N/A
+- If so, is the vehicle present in the following list of North American-assembled vehicles? N/A
+
+(2) After considering each criterion in turn, phrase the final answer as &quot;Because of {reasons}, the answer is likely {yes or no}.&quot;
+
+Because the Toyota Prius Prime meets all of the criteria for a federal tax credit, the answer is likely yes.
+</code></pre></div>
+<h3 id="few-shot-examples">Few-shot examples<a class="headerlink" href="#few-shot-examples" title="Permanent link">&para;</a></h3>
+<h4 id="method_1">Method<a class="headerlink" href="#method_1" title="Permanent link">&para;</a></h4>
+<p>Prompting the model to reason out its answers can be done in many ways. One way is to demonstrate with a few examples ('few-shot'), as studied by <a href="https://ai.googleblog.com/2022/05/language-models-perform-reasoning-via.html">Jason Wei and Denny Zhou et al. from Google</a>. Here's an example few-shot chain-of-thought prompt:</p>
+<p><a href="https://ai.googleblog.com/2022/05/language-models-perform-reasoning-via.html"><img alt="chain of thought example" src="../images/chain_of_thought_fig1.png" />
+<br>Source: <em>Chain of Thought Prompting Elicits Reasoning in Large Language Models</em> Jason Wei and Denny Zhou et al. (2022)</a></p>
+<p>More demonstrations of reasoning chains written by human labelers:</p>
+<p><a href="https://ai.googleblog.com/2022/05/language-models-perform-reasoning-via.html"><img alt="chain of thought example" src="../images/chain_of_thought_fig3.png" />
+<br>Source: <em>Chain of Thought Prompting Elicits Reasoning in Large Language Models</em> Jason Wei and Denny Zhou et al. (2022)</a></p>
+<p><a href="https://twitter.com/Meaningness/status/1561062170074370048?s=20&amp;t=mpHt8f3RRboztXxdhLFnWQ">(Note that it has been called into question whether pears actually float)</a></p>
+<h4 id="results_1">Results<a class="headerlink" href="#results_1" title="Permanent link">&para;</a></h4>
+<p>Testing on grade school math problems, the authors found that chain of thought prompting tripled the solve rate, from 18% to 57%.</p>
+<p><a href="https://ai.googleblog.com/2022/05/language-models-perform-reasoning-via.html"><img alt="chain of thought example" src="../images/chain_of_thought_fig5.png" />
+<br>Source: <em>Chain of Thought Prompting Elicits Reasoning in Large Language Models</em> Jason Wei and Denny Zhou et al. (2022)</a></p>
+<p>In addition to math problems, chain of thought prompting also lifted performance on questions related to sports understanding, coin flip tracking, and last letter concatenation. In most cases, not many examples were need to saturate the performance gains (less than 8 or so).</p>
+<p><a href="https://ai.googleblog.com/2022/05/language-models-perform-reasoning-via.html"><img alt="chain of thought example" src="../images/chain_of_thought_fig11.png" />
+<br>Source: <em>Chain of Thought Prompting Elicits Reasoning in Large Language Models</em> Jason Wei and Denny Zhou et al. (2022)</a></p>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2201.11903">full paper</a>.</p>
+<h4 id="implications_1">Implications<a class="headerlink" href="#implications_1" title="Permanent link">&para;</a></h4>
+<p>One advantage of the few-shot example-based approach relative to the <code>Let's think step by step</code> technique is that you can more easily specify the format, length, and style of reasoning that you want the model to perform before landing on its final answer. This can be be particularly helpful in cases where the model isn't initially reasoning in the right way or depth.</p>
+<h3 id="fine-tuned">Fine-tuned<a class="headerlink" href="#fine-tuned" title="Permanent link">&para;</a></h3>
+<h4 id="method_2">Method<a class="headerlink" href="#method_2" title="Permanent link">&para;</a></h4>
+<p>In general, to eke out maximum performance on a task, you'll need to fine-tune a custom model. However, fine-tuning a model using explanations may take thousands of example explanations, which are costly to write.</p>
+<p>In 2022, Eric Zelikman and Yuhuai Wu et al. published a clever procedure for using a few-shot prompt to generate a dataset of explanations that could be used to fine-tune a model. The idea is to use a few-shot prompt to generate candidate explanations, and only keep the explanations that produce the correct answer. Then, to get additional explanations for some of the incorrect answers, retry the the few-shot prompt but with correct answers given as part of the question. The authors called their procedure STaR (Self-taught Reasoner):</p>
+<p><a href="https://arxiv.org/abs/2203.14465"><img alt="STaR procedure" src="../images/star_fig1.png" />
+<br>Source: <em>STaR: Bootstrapping Reasoning With Reasoning</em> by Eric Zelikman and Yujuai Wu et al. (2022)</a></p>
+<p>With this technique, you can combine the benefits of fine-tuning with the benefits of chain-of-thought prompting without needing to write thousands of example explanations.</p>
+<h4 id="results_2">Results<a class="headerlink" href="#results_2" title="Permanent link">&para;</a></h4>
+<p>When the authors applied this technique to a Common Sense Q&amp;A dataset, they found that STaR outperformed both chain-of-thought prompting alone (73% &gt; 37%) and fine-tuning alone (73% &gt; 60%):</p>
+<p><a href="https://arxiv.org/abs/2203.14465"><img alt="STaR results" src="../images/star_tab1.png" />
+<br>Source: <em>STaR: Bootstrapping Reasoning With Reasoning</em> by Eric Zelikman and Yujuai Wu et al. (2022)</a></p>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2203.14465">full paper</a>.</p>
+<h4 id="implications_2">Implications<a class="headerlink" href="#implications_2" title="Permanent link">&para;</a></h4>
+<p>Using a few-shot prompt to extend or modify a fine-tuning dataset is an idea that can be generalized beyond explanation writing. For example, if you have large quantities of unstructured text that you want to train on, you may find opportunities to use a prompt to extract a structured dataset from your unstructured text, and then fine-tune a custom model on that structured dataset.</p>
+<h2 id="extensions-to-chain-of-thought-prompting">Extensions to chain-of-thought prompting<a class="headerlink" href="#extensions-to-chain-of-thought-prompting" title="Permanent link">&para;</a></h2>
+<p>A number of extensions of chain-of-thought prompting have been published as well.</p>
+<h3 id="selection-inference-prompting">Selection-inference prompting<a class="headerlink" href="#selection-inference-prompting" title="Permanent link">&para;</a></h3>
+<h4 id="method_3">Method<a class="headerlink" href="#method_3" title="Permanent link">&para;</a></h4>
+<p>Published by Antonia Creswell et al., one extension of the chain-of-thought technique is to split the single prompt for generating explanations and answers into smaller parts. First, a prompt selects a relevant subset of facts from the text ('selection prompt'). Then, a second prompt infers a conclusion from the selected facts ('inference prompt'). These prompts are then alternated in a loop to generate multiple steps of reasoning and eventually land on a final answer. The authors illustrate the idea in the following figure:</p>
+<p><a href="https://arxiv.org/abs/2205.09712"><img alt="Selection-inference prompting" src="../images/selection-inference_fig1.png" />
+<br>Source: <em>Selection-Inference: Exploiting Large Language Models for Interpretable Logical Reasoning</em> by Antonia Creswell et al. (2022)</a></p>
+<h4 id="results_3">Results<a class="headerlink" href="#results_3" title="Permanent link">&para;</a></h4>
+<p>When applied to a 7B-parameter model, the authors found that selection-inference prompting substantially improved performance relative to chain-of-thought prompting on the bAbi and Proof Writer benchmark tasks (both of which require longer sequences of reasoning steps). The best performance they achieved combined both selection-inference prompting with fine-tuning.</p>
+<p><a href="https://arxiv.org/abs/2205.09712"><img alt="Selection-inference prompting" src="../images/selection-inference_fig4.png" />
+<br>Source: <em>Selection-Inference: Exploiting Large Language Models for Interpretable Logical Reasoning</em> by Antonia Creswell et al. (2022)</a></p>
+<h4 id="implications_3">Implications<a class="headerlink" href="#implications_3" title="Permanent link">&para;</a></h4>
+<p>Although the gains on these benchmarks were large, these benchmarks were specifically chosen because they required longer sequences of reasoning. On problems that don't require reasoning with many steps, the gains are likely smaller.</p>
+<p>The results highlight a couple of general lessons for working with large language models. One, splitting up complex tasks into smaller tasks is a great way to improve reliability and performance; the more atomic the task, the less room there is for the model to err. Two, getting maximum performance often means combining fine-tuning with whatever approach you've chosen.</p>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2205.09712">full paper</a>.</p>
+<h3 id="faithful-reasoning-architecture">Faithful reasoning architecture<a class="headerlink" href="#faithful-reasoning-architecture" title="Permanent link">&para;</a></h3>
+<p>A few months after publishing the selection-inference prompting technique, the authors extended the technique in a follow-up paper, with ideas for:</p>
+<ul>
+<li>figuring out when the selection-inference cycle should stop or continue</li>
+<li>adding a value function to help search over multiple reasoning paths</li>
+<li>reducing hallucination of fake facts by fine-tuning a model to reason about sentence labels (e.g., sen1) rather than writing out the sentences themselves</li>
+</ul>
+<h4 id="method_4">Method<a class="headerlink" href="#method_4" title="Permanent link">&para;</a></h4>
+<p>In the original selection-inference technique, specialized 'selection' and 'inference' prompts are alternated to select facts and make inferences from those facts, combining to generate a sequence of reasoning steps.</p>
+<p>The authors extend this technique with two additional components.</p>
+<p>First, the authors add a 'halter' model that, after each inference step, is asked whether the inferences thus far are sufficient to answer the question. If yes, then the model generates a final answer.</p>
+<p>The halter models brings a couple of advantages:</p>
+<ul>
+<li>it can tell the selection-inference process to stop or keep going, as necessary.</li>
+<li>if the process never halts, you'll get no answer, which is often preferable to a hallucinated guess</li>
+</ul>
+<p><a href="https://arxiv.org/abs/2208.14271"><img alt="Faithful reasoning" src="../images/faithful-reasoning_fig3.png" />
+<br>Source: <em>Faithful Reasoning Using Large Language Models</em> by Antonia Creswell et al. (2022)</a></p>
+<p><a href="https://arxiv.org/abs/2208.14271"><img alt="Faithful reasoning" src="../images/faithful-reasoning_fig5.png" />
+<br>Source: <em>Faithful Reasoning Using Large Language Models</em> by Antonia Creswell et al. (2022)</a></p>
+<p>Second, the authors add a value function, which is used to assess the quality of reasoning steps and search over multiple reasoning trajectories. This echoes a common theme for increasing reliability; instead of generating a single answer from the model, generate a set of answers and then use some type of value function / discriminator / verifier model to pick the best one.</p>
+<p><a href="https://arxiv.org/abs/2208.14271"><img alt="Faithful reasoning" src="../images/faithful-reasoning_fig7.png" />
+<br>Source: <em>Faithful Reasoning Using Large Language Models</em> by Antonia Creswell et al. (2022)</a></p>
+<p>In addition to these two extensions, the authors also use a trick to reduce hallucination of fake facts. Rather than asking the model to write out factual sentences, they fine-tune a model to work with sentence labels (e.g., sen1) instead. This helps prevent the model from hallucinating fake facts not mentioned in the prompt context.</p>
+<p><a href="https://arxiv.org/abs/2208.14271"><img alt="Faithful reasoning" src="../images/faithful-reasoning_fig4.png" />
+<br>Source: <em>Faithful Reasoning Using Large Language Models</em> by Antonia Creswell et al. (2022)</a></p>
+<h4 id="results_4">Results<a class="headerlink" href="#results_4" title="Permanent link">&para;</a></h4>
+<p>The authors evaluated their technique on two benchmarks: the ProofWriter task (not shown) and <a href="https://allenai.org/data/entailmentbank">EntailmentBankQA</a> (shown). The technique increased accuracy substantially, especially on harder reasoning problems.</p>
+<p><img alt="Faithful reasoning" src="../images/faithful-reasoning_tab2.png" />
+<br>Source: <em>Faithful Reasoning Using Large Language Models</em> by Antonia Creswell et al. (2022)](https://arxiv.org/abs/2208.14271)</p>
+<p>In addition, their sentence label manipulation trick essentially eliminated hallucination!</p>
+<p><img alt="Faithful reasoning" src="../images/faithful-reasoning_tab5.png" />
+<br>Source: <em>Faithful Reasoning Using Large Language Models</em> by Antonia Creswell et al. (2022)](https://arxiv.org/abs/2208.14271)</p>
+<h4 id="implications_4">Implications<a class="headerlink" href="#implications_4" title="Permanent link">&para;</a></h4>
+<p>This paper illustrates a number of helpful lessons for improving the reliability of large language models:</p>
+<ul>
+<li>Split complex tasks into smaller, more reliable subtasks</li>
+<li>Generate your answer in a step-by-step fashion, evaluating it along the way</li>
+<li>Generate many possible answers and use another model or function to pick the ones that look best</li>
+<li>Reduce hallucination by constraining what the model can say (e.g., by using sentence labels instead of sentences)</li>
+<li>Maximize performance of models by fine-tuning them on specialized tasks</li>
+</ul>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2205.09712">full paper</a>.</p>
+<h3 id="least-to-most-prompting">Least-to-most prompting<a class="headerlink" href="#least-to-most-prompting" title="Permanent link">&para;</a></h3>
+<p>In addition to doing poorly on long reasoning chains (where selection-inference shines), chain-of-thought prompting can especially struggle when the examples are short but the task is long.</p>
+<h4 id="method_5">Method<a class="headerlink" href="#method_5" title="Permanent link">&para;</a></h4>
+<p>Least-to-most prompting is another technique that splits up reasoning tasks into smaller, more reliable subtasks. The idea is to elicit a subtask from the model by prompting it with something like <code>To solve {question}, we need to first solve: "</code>. Then, with that subtask in hand, the model can generate a solution. The solution is appended to the original question and the process is repeated until a final answer is produced.</p>
+<p><a href="https://arxiv.org/abs/2205.10625"><img alt="Least-to-most prompting" src="../images/least-to-most_fig1.png" />
+<br>Source: <em>Least-to-most Prompting Enables Complex Reasoning in Large Language Models</em> by Denny Zhou et al. (2022)</a></p>
+<h4 id="results_5">Results<a class="headerlink" href="#results_5" title="Permanent link">&para;</a></h4>
+<p>When applied to benchmarks involving long reasoning chains using <code>code-davinci-002</code> (which is optimized for code but can still understand text), the authors measured gains as large as 16% -&gt; 99.7%!</p>
+<p><a href="https://arxiv.org/abs/2205.10625">
+<img alt="Least-to-most prompting results on last-letter-concatenation task" src="../images/least-to-most_tab4.png" />
+<img alt="Least-to-most prompting results on SCAN" src="../images/least-to-most_tab9.png" />
+<img alt="Least-to-most prompting results on DROP numerical reasoning" src="../images/least-to-most_tab11.png" />
+<br>Source: <em>Least-to-most Prompting Enables Complex Reasoning in Large Language Models</em> by Denny Zhou et al. (2022)</a></p>
+<h4 id="implications_5">Implications<a class="headerlink" href="#implications_5" title="Permanent link">&para;</a></h4>
+<p>Although the above gains from least-to-most prompting are impressive, they are measured on a very narrow set of tasks that require long reasoning chains.</p>
+<p>Still, they illustrate a common theme: increase reliability by (a) breaking complex tasks into smaller subtasks and (b) giving the model more time and space to work out the answer.</p>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2205.10625">full paper</a>.</p>
+<h2 id="related-ideas">Related ideas<a class="headerlink" href="#related-ideas" title="Permanent link">&para;</a></h2>
+<h3 id="maieutic-prompting">Maieutic prompting<a class="headerlink" href="#maieutic-prompting" title="Permanent link">&para;</a></h3>
+<h4 id="method_6">Method<a class="headerlink" href="#method_6" title="Permanent link">&para;</a></h4>
+<p>In contrast to the previous techniques, which try to maximize the likelihood of correct answers, another approach is to use GPT-3 to generate a tree of possible explanations (both correct <em>and incorrect</em>), and then analyze their relationships to guess at which set is correct. This technique was coined maieutic prompting by <a href="https://arxiv.org/abs/2205.11822">Jaehun Jung et al. in May 2022</a> (maieutic means relating to the Socratic method of asking questions to elicit ideas).</p>
+<p>The method is complicated, and works as follows:</p>
+<ul>
+<li>First, build a maieutic tree, where each node is a statement that could be true or false:</li>
+<li>Start with a multiple-choice question or true/false statement (e.g. <code>War cannot have a tie</code>)</li>
+<li>For each possible answer to the question, use the model to generate a corresponding explanation (with a prompt like <code>War cannot have a tie? True, because</code>)</li>
+<li>Then, prompt the model with the question and the generated explanation, and ask it to produce the answer. If reversing the explanation (with a prefix like <code>It is wrong to say that {explanation}</code>) reverses the answer, then the explanation is considered 'logically integral.'</li>
+<li>If an explanation is not logically integral, then repeat the above process recursively, with each explanation turned into a True or False question, and generate more explanations for each new question.</li>
+<li>After all of the recursive explaining is done, you end up with a tree of explanations, where each leaf on the tree has the property that reversing the explanation reverses the model's answer.</li>
+<li>Second, convert the tree into a graph of relations:</li>
+<li>For each node in the tree, calculate the model's relative belief in each node (inferred from the probability of getting an answer of <code>True</code> to given an explanation)</li>
+<li>For each pair of nodes in the tree, use the model to identify whether they are entailed (implied) or contradicted</li>
+<li>Third, find the most consistent set of beliefs and take those to be true:</li>
+<li>Specifically, using the strength of belief in each node and the logical relationships between them, formulate the problem as a weighted maximum satisfiability problem (MAX-SAT)</li>
+<li>Use a solver to the find the most self-consistent set of beliefs, and take those as true</li>
+</ul>
+<p><a href="https://arxiv.org/abs/2205.11822">
+  <img alt="Maieutic prompting" src="../images/maieutic_fig2.png" />
+  <img alt="Maieutic prompting" src="../images/maieutic_fig6.png" />
+<br>Source: <em>Maieutic Prompting: Logically Consistent Reasoning with Recursive Explanations</em> by Jaehun Jung et al. (2022)</a></p>
+<h4 id="results_6">Results<a class="headerlink" href="#results_6" title="Permanent link">&para;</a></h4>
+<p><a href="https://arxiv.org/abs/2205.11822"><img alt="Maieutic prompting results" src="../images/maieutic_tab1.png" />
+<br>Source: <em>Maieutic Prompting: Logically Consistent Reasoning with Recursive Explanations</em> by Jaehun Jung et al. (2022)</a></p>
+<h4 id="implications_6">Implications<a class="headerlink" href="#implications_6" title="Permanent link">&para;</a></h4>
+<p>Beyond the complexity, one limitation of this method is that it appears to only apply to questions that can be posed as multiple-choice.</p>
+<p>To learn more, read the <a href="https://arxiv.org/abs/2205.11822">full paper</a>.</p>
+<h2 id="extensions">Extensions<a class="headerlink" href="#extensions" title="Permanent link">&para;</a></h2>
+<h3 id="self-consistency">Self-consistency<a class="headerlink" href="#self-consistency" title="Permanent link">&para;</a></h3>
+<h4 id="method_7">Method<a class="headerlink" href="#method_7" title="Permanent link">&para;</a></h4>
+<p>For tasks with a discrete set of answers, one simple way to improve reliability is to sample multiple explanations &amp; answers from the model (using a positive temperature) and then pick the final answer that appears most often.</p>
+<p><a href="https://arxiv.org/abs/2203.11171"><img alt="Self-consistency method" src="../images/self-consistency_fig1.png" />
+<br>Source: <em>Self-Consistency Improves Chain of Thought Reasoning in Language Models</em> by Xuezhi Wang et al. (2022)</a></p>
+<h4 id="results_7">Results<a class="headerlink" href="#results_7" title="Permanent link">&para;</a></h4>
+<p>This technique lifted accuracies by anywhere from 1 to 24 percentage points on a suite of math and reasoning benchmarks. (Plotted below are results from Google's LaMDA model; using Google's larger PaLM model, the baselines were higher but the gains were a bit smaller.)</p>
+<p><a href="https://arxiv.org/abs/2203.11171"><img alt="Self-consistency results" src="../images/self-consistency_fig3.png" />
+<br>Source: <em>Self-Consistency Improves Chain of Thought Reasoning in Language Models</em> by Xuezhi Wang et al. (2022)</a></p>
+<h4 id="implications_7">Implications<a class="headerlink" href="#implications_7" title="Permanent link">&para;</a></h4>
+<p>Although this technique is simple to implement, it can be costly. Generating a set of 10 answers will increase your costs by 10x.</p>
+<p>Also, as with many of these techniques, it applies only to tasks with a limited set of answers. For open-ended tasks where each answer is unique (such as writing a poem), it's not obvious what it would mean to pick the most common answer.</p>
+<p>Lastly, this technique ought to be most beneficial when there are multiple paths or phrasings to reach an answer; if there's only one path, then the technique may not help at all. An extreme example: If the task was to generate a single token answer, then taking the most common token from 100 generations would be no different than taking the token with the highest logprobs (which you can get with a single generation at temperature=0).</p>
+<h3 id="verifiers">Verifiers<a class="headerlink" href="#verifiers" title="Permanent link">&para;</a></h3>
+<p>Another key technique for improving task performance is to train a verifier or discriminator model to evaluate the outputs of the main generative model. If the discriminator rejects the output, then you can resample the generative model until you get an acceptable output. In many cases, it's easier to judge an answer than it is to create an answer, which helps explain the power of this method.</p>
+<h4 id="method_8">Method<a class="headerlink" href="#method_8" title="Permanent link">&para;</a></h4>
+<p>In 2021, OpenAI researchers applied this technique to grade school math problems, using the following procedure:</p>
+<ul>
+<li>First, they fine-tuned a model on questions and solutions</li>
+<li>For each problem in the training set, they generated 100 solutions</li>
+<li>Each of those 100 solutions was automatically labeled as either correct or incorrect, based on whether the final answer was correct</li>
+<li>Using those solutions, with some labeled correct and some labeled incorrect, they fine-tuned a verifier model to classify whether a question and candidate solution was correct or incorrect</li>
+<li>Finally, at test time, the generative model creates 100 solutions to each problem, and the one with the highest score according to the verifier model is picked as the final answer</li>
+</ul>
+<p><a href="https://arxiv.org/abs/2110.14168"><img alt="Verifier method" src="../images/verifiers_fig3.png" />
+<br>Source: <em>Training Verifiers to Solve Math Word Problems</em> by Karl Cobbe et al. (2021)</a></p>
+<h4 id="results_8">Results<a class="headerlink" href="#results_8" title="Permanent link">&para;</a></h4>
+<p>With a 175B GPT-3 model and 8,000 training examples, this technique substantially lifted grade school math accuracy from ~33% to ~55%.</p>
+<p><a href="https://arxiv.org/abs/2110.14168"><img alt="Verifier results" src="../images/verifiers_fig5.png" />
+<br>Source: <em>Training Verifiers to Solve Math Word Problems</em> by Karl Cobbe et al. (2021)</a></p>
+<h4 id="implications_8">Implications<a class="headerlink" href="#implications_8" title="Permanent link">&para;</a></h4>
+<p>Similar to the self-consistency technique, this method can get expensive, as generating, say, 100 solutions per task will increase your costs by roughly ~100x.</p>
+<h2 id="theories-of-reliability">Theories of reliability<a class="headerlink" href="#theories-of-reliability" title="Permanent link">&para;</a></h2>
+<p>Although the techniques above vary in their approach, they all share the goal of improving reliability on complex tasks. Mainly they do this by:</p>
+<ul>
+<li>decomposing unreliable operations into smaller, more reliable operations (e.g., selection-inference prompting)</li>
+<li>using multiple steps or multiple relationships to make the system's reliability greater than any individual component (e.g., maieutic prompting)</li>
+</ul>
+<h3 id="probabilistic-graphical-models">Probabilistic graphical models<a class="headerlink" href="#probabilistic-graphical-models" title="Permanent link">&para;</a></h3>
+<p>This paradigm of trying to build a reliable system out of less reliable components is reminiscent of probabilistic programming, and many of the analysis techniques of that field can be applied to this one.</p>
+<p>In the paper <em>Language Model Cascades</em>, David Dohan et al. interpret the above techniques in the paradigm of probabilistic graphical models:</p>
+<h4 id="chain-of-thought-prompting">Chain of thought prompting<a class="headerlink" href="#chain-of-thought-prompting" title="Permanent link">&para;</a></h4>
+<p><a href="https://arxiv.org/abs/2207.10342"><img alt="graphical model of chain of thought prompting" src="../images/lm_cascades_fig1.png" />
+<br>Source: <em>Language Model Cascades</em> by David Dohan et al. (2022)</a></p>
+<h4 id="fine-tuned-chain-of-thought-prompting-self-taught-reasoner">Fine-tuned chain of thought prompting / Self-taught reasoner<a class="headerlink" href="#fine-tuned-chain-of-thought-prompting-self-taught-reasoner" title="Permanent link">&para;</a></h4>
+<p><a href="https://arxiv.org/abs/2207.10342"><img alt="graphical model of fine-tuned chain of thought prompting" src="../images/lm_cascades_fig3.png" />
+<br>Source: <em>Language Model Cascades</em> by David Dohan et al. (2022)</a></p>
+<h4 id="selection-inference-prompting_1">Selection-inference prompting<a class="headerlink" href="#selection-inference-prompting_1" title="Permanent link">&para;</a></h4>
+<p><a href="https://arxiv.org/abs/2207.10342"><img alt="graphical model of selection-inference prompting" src="../images/lm_cascades_fig4.png" />
+<br>Source: <em>Language Model Cascades</em> by David Dohan et al. (2022)</a></p>
+<h4 id="verifiers_1">Verifiers<a class="headerlink" href="#verifiers_1" title="Permanent link">&para;</a></h4>
+<p><a href="https://arxiv.org/abs/2207.10342"><img alt="graphical model of verifiers" src="../images/lm_cascades_fig5.png" />
+<br>Source: <em>Language Model Cascades</em> by David Dohan et al. (2022)</a></p>
+<h4 id="implications_9">Implications<a class="headerlink" href="#implications_9" title="Permanent link">&para;</a></h4>
+<p>Although formulating these techniques as probabilistic graphical models may not be immediately useful for solving any particular problem, the framework may be helpful in selecting, combining, and discovering new techniques.</p>
+<h2 id="closing-thoughts">Closing thoughts<a class="headerlink" href="#closing-thoughts" title="Permanent link">&para;</a></h2>
+<p>Research into large language models is very active and evolving rapidly. Not only do researchers continue to improve the models, they are also continue to improve our understanding of how to best employ the models. To underscore the pace of these developments, note that all of the papers shared above were published within the past 12 months (as I write in Sep 2022).</p>
+<p>In the future, expect better models and better techniques to be published. Even if the specific techniques here are eclipsed by future best practices, the general principles behind them will likely remain a key part of any expert user's toolkit.</p>
+<h2 id="bibliography">Bibliography<a class="headerlink" href="#bibliography" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Lesson</th>
+<th>Paper</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Break complex tasks into simpler subtasks (and consider exposing the intermediate outputs to users)</td>
+<td><a href="https://arxiv.org/abs/2110.01691">AI Chains: Transparent and Controllable Human-AI Interaction by Chaining Large Language Model Prompts</a></td>
+<td>2021 Oct</td>
+</tr>
+<tr>
+<td>You can improve output by generating many candidates, and then picking the one that looks best</td>
+<td><a href="https://arxiv.org/abs/2110.14168">Training Verifiers to Solve Math Word Problems</a></td>
+<td>2021 Oct</td>
+</tr>
+<tr>
+<td>On reasoning tasks, models do better when they reason step-by-step before answering</td>
+<td><a href="https://arxiv.org/abs/2201.11903">Chain of Thought Prompting Elicits Reasoning in Large Language Models</a></td>
+<td>2022 Jan</td>
+</tr>
+<tr>
+<td>You can improve step-by-step reasoning by generating many explanation-answer outputs, and picking the most popular answer</td>
+<td><a href="https://arxiv.org/abs/2203.11171">Self-Consistency Improves Chain of Thought Reasoning in Language Models</a></td>
+<td>2022 Mar</td>
+</tr>
+<tr>
+<td>If you want to fine-tune a step-by-step reasoner, you can do it with multiple-choice question &amp; answer data alone</td>
+<td><a href="https://arxiv.org/abs/2203.14465">STaR: Bootstrapping Reasoning With Reasoning</a></td>
+<td>2022 Mar</td>
+</tr>
+<tr>
+<td>The step-by-step reasoning method works great even with zero examples</td>
+<td><a href="https://arxiv.org/abs/2205.11916">Large Language Models are Zero-Shot Reasoners</a></td>
+<td>2022 May</td>
+</tr>
+<tr>
+<td>You can do better than step-by-step reasoning by alternating a ‘selection’ prompt and an ‘inference’ prompt</td>
+<td><a href="https://arxiv.org/abs/2205.09712">Selection-Inference: Exploiting Large Language Models for Interpretable Logical Reasoning</a></td>
+<td>2022 May</td>
+</tr>
+<tr>
+<td>On long reasoning problems, you can improve step-by-step reasoning by splitting the problem into pieces to solve incrementally</td>
+<td><a href="https://arxiv.org/abs/2205.10625">Least-to-most Prompting Enables Complex Reasoning in Large Language Models</a></td>
+<td>2022 May</td>
+</tr>
+<tr>
+<td>You can have the model analyze both good and bogus explanations to figure out which set of explanations are most consistent</td>
+<td><a href="https://arxiv.org/abs/2205.11822">Maieutic Prompting: Logically Consistent Reasoning with Recursive Explanations</a></td>
+<td>2022 May</td>
+</tr>
+<tr>
+<td>You can think about these techniques in terms of probabilistic programming, where systems comprise unreliable components</td>
+<td><a href="https://arxiv.org/abs/2207.10342">Language Model Cascades</a></td>
+<td>2022 Jul</td>
+</tr>
+<tr>
+<td>You can eliminate hallucination with sentence label manipulation, and you can reduce wrong answers with a 'halter' prompt</td>
+<td><a href="https://arxiv.org/abs/2208.14271">Faithful Reasoning Using Large Language Models</a></td>
+<td>2022 Aug</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>
